@@ -3,435 +3,195 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Votion 3DGS 2.0 — Phase Plan Index</title>
+  <title>VotionSplat 3.0</title>
+  <link rel="icon" href="media/icon.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="votion-plan.css?v=20260905a" />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="votion-plan.css" />
 </head>
 <body>
   <div class="wrap">
     <header class="hero">
-      <p class="eyebrow">Votion 3DGS · Engineering Blueprint</p>
-      <h1>Phase plan index</h1>
-      <p class="tagline">
-        Native Windows desktop app: 2D Images, 360 Images, or text → explorable Gaussian splat for Unreal&nbsp;5.5.
-        No ComfyUI, no WSL. Code lives at <code>D:\Votion3DGS\</code>.
-      </p>
-      <div class="meta-row">
-        <span>RTX 3090 24GB</span>
-        <span>Python 3.12 · CUDA 12.8</span>
-        <span>WorldStereo memory-DMD FP8</span>
-        <span>UE 5.5 MLSLabsRenderer</span>
-      </div>
-      <figure class="hero-media">
-        <img src="media/video-mickmumpitz.jpg" alt="Mickmumpitz: We Open Sourced World Generation — video still" />
-        <figcaption>
-          Still from Mickmumpitz,
-          <a href="https://www.youtube.com/watch?v=eJuYBNrD8HI">We Open Sourced World Generation</a>.
-        </figcaption>
-      </figure>
+      <img src="media/repo_banner.png" alt="VotionSplat" style="width:100%;height:auto;background:#000" />
+      <p class="eyebrow">Windows · PySide6 · Unreal</p>
+      <h1>VotionSplat 3.0</h1>
+      <p class="tagline">A photo, a 360 panorama, or a sentence becomes a Gaussian splat for Unreal.</p>
     </header>
 
-    <nav class="phases" aria-label="Phases">
-      <a class="here" href="Votion_3DGS_2.0_Index.html">Index</a>
-      <a href="Votion_3DGS_2.0_Phase0.html">P0 Skeleton</a>
-      <a href="Votion_3DGS_2.0_Phase1.html">P1 Pano</a>
-      <a href="Votion_3DGS_2.0_Phase2.html">P2 Splat</a>
-      <a href="Votion_3DGS_2.0_Phase3.html">P3 Dataset</a>
-      <a href="Votion_3DGS_2.0_Phase4.html">P4 Product</a>
-    </nav>
-
-    <nav class="toc" aria-label="On this page">
-      <a href="#read">01 · How to read</a>
-      <a href="#certainty">02 · Certainty log</a>
-      <a href="#pipeline">03 · Pipeline</a>
-      <a href="#tree">04 · Folder tree</a>
-      <a href="#models">05 · Model files</a>
-      <a href="#vram">06 · VRAM profiles</a>
-      <a href="#visuals">07 · Visual sources</a>
-      <a href="#p5">08 · P5 stretch</a>
-    </nav>
-
-    <section id="read">
-      <h2><span class="num">01</span>How to read</h2>
-      <p>
-        Yik Votion WorldFM (Gradio + WSL) is the <strong>V1 archive</strong>. Do not mix it into V2.
-        Markdown sources sit next to these HTML files. P5 is an appendix here, not its own file.
-      </p>
-      <table>
-        <thead><tr><th>Page</th><th>Phase</th><th>Goal</th></tr></thead>
-        <tbody>
-          <tr><td><a href="Votion_3DGS_2.0_Phase0.html">Phase 0</a></td><td>Skeleton</td><td>PySide6 window, job bus, venv, model downloader</td></tr>
-          <tr><td><a href="Votion_3DGS_2.0_Phase1.html">Phase 1</a></td><td>Pano</td><td><strong>2D Images</strong> (default) / <strong>360 Images</strong> / <strong>text</strong> → 8K ERP (<code>pano.png</code>)</td></tr>
-          <tr><td><a href="Votion_3DGS_2.0_Phase2.html">Phase 2</a></td><td>First splat</td><td>MoGe-2 depth → Plot Camera → known-pose COLMAP → <code>splat.ply</code> (LiteGS or MCMC Compact)</td></tr>
-          <tr><td><a href="Votion_3DGS_2.0_Phase3.html">Phase 3</a></td><td>Dataset</td><td>4 rails, WorldStereo joint sample, HiRes all, keep/ditch Reconstruct</td></tr>
-          <tr><td><a href="Votion_3DGS_2.0_Phase4.html">Phase 4</a></td><td>Product</td><td>Profiles, installer, LiteGS / MCMC Compact, Open-in-Brush/LichtFeld, UE 5.5</td></tr>
-        </tbody>
-      </table>
-    </section>
-
-    <section id="certainty">
-      <h2><span class="num">02</span>Certainty log</h2>
-      <p>Locked by you in this planning thread. Everything else is either copied from a named source or marked unknown.</p>
-      <ol>
-        <li><strong>Engine:</strong> native Python. No ComfyUI in the product. No WSL.</li>
-        <li><strong>Shell:</strong> PySide6. Engineering Blueprint look from V1.</li>
-        <li><strong>Docs:</strong> index + one file per phase (markdown + HTML).</li>
-        <li><strong>Code home:</strong> <code>D:\Votion3DGS\</code>. Docs also copied here.</li>
-        <li><strong>GPU / Quality:</strong> RTX 3090 24GB. Quality generation is WorldStereo memory-DMD FP8. Wan 2.1 I2V, Matrix-3D, and LightX2V are not in this build.</li>
-        <li><strong>Weights:</strong> copy from ComfyUI if present; else Hugging Face into <code>&lt;install_root&gt;\models</code> (dev default <code>D:\Votion3DGS</code>).</li>
-        <li><strong>ComfyUI root:</strong> <code>D:\ComfyUI_windows_portable_360</code></li>
-        <li><strong>Venv:</strong> independent Python 3.12 + CUDA 12.8 + PyTorch cu128. Do not reuse <code>python_embeded</code>.</li>
-        <li>Exact PyTorch <em>patch</em> is not pinned — write <code>requirements.lock</code> on first Phase 0 install.</li>
-        <li><strong>Product name:</strong> Votion 3DGS</li>
-        <li><strong>Trainer (amended 2026-09-07):</strong> in-app <strong>LiteGS</strong> backend → <code>splat.ply</code>. User picks the density controller <strong>LiteGS</strong> (default) or <strong>MCMC Compact</strong> before Train / Retrain.
-          LiteGS = vendored <a href="https://github.com/MooreThreads/LiteGS">MooreThreads/LiteGS</a> raster + <code>DensityControllerTamingGS</code> with the UI budget as target. MCMC Compact = Jung &amp; Hong, <em>MCMC-Guided Compact 3DGS</em> (SIGGRAPH Asia 2025 TC, section 3.1 only).
-          Both share the same Gaussian raster. Continue keeps the checkpoint’s controller. ADC is not offered. The gsplat Splat3 / MCMC trainer is retired (items 48–56).
-          Brush / LichtFeld / Postshot are “Open in…”. Live viewport / Stop / Star camera: items 41–47 (2026-09-05).</li>
-        <li><strong>Unreal:</strong> Engine 5.5 + <strong>MLSLabsRenderer</strong> (interim) for <code>splat.ply</code> —
-          <a href="https://github.com/mlslabs/MLSLabsGaussianSplattingRenderer-UE">GitHub</a> ·
-          <a href="https://www.fab.com/listings/f91b57cc-958d-40dd-a455-2535bf00e588">Fab</a>.
-          Update slot held for a future better UE renderer.</li>
-        <li><strong>Pano inputs:</strong> three first-class Phase 1 modes — (1) <strong>2D Images</strong> → ERP (default), (2) <strong>360 Images</strong>, (3) <strong>text</strong> → ERP. Happy path is (1), then MoGe-2 depth, then WorldStereo.</li>
-        <li><strong>2D Images surroundings:</strong> type a sentence or local Florence-2 caption (editable). Always append <code>no peoples, no cars</code>. Empty still blocks Generate. Hub: <code>florence-community/Florence-2-large</code> @ <code>4271c66</code>.</li>
-        <li><strong>Ostris:</strong> native port <strong>READY</strong> (2026-09-03). 2D Images Generate is enabled. Do not shell out to ComfyUI.</li>
-        <li><strong>Chrome:</strong> V1 left rail + right viewport + six P0 stage chips. A job strip (caption + bar) sits under the chips on every page. Log and Help are matching bottom drawers. Switching chips restores generated views.</li>
-        <li><strong>Panorama viewport (2026-09-03):</strong> user-draggable split. Left 2:1 ERP: <strong>Fit</strong> (full picture) or <strong>100%</strong> (native pixels + 2D slide). Right = spherical HDRI-style look (yaw + pitch), not a pan-only strip. 2D drop shows a thumbnail.</li>
-        <li><strong>h_fov:</strong> slider <strong>and</strong> typed number. Default 70. Range 10–170, step 0.5.</li>
-        <li><strong>Upscaler prompt:</strong> visible box, default <code>High resolution photography</code>. Keep it on the 360 Images rail.</li>
-        <li><strong>Seeds visible:</strong> 2D <code>12345</code> / seam <code>12345</code>; text <code>322344328372862</code> / seam <code>8</code>; WorldStereo <code>1024</code>.</li>
-        <li><strong>Geometry viewport (2026-09-03):</strong> FLOOR and SIDE sit <strong>side by side</strong>; Preview flight sits under both. Rail gizmos (path, star 0, red 1–3, look arrows) must be visible. Plates + gizmos are <strong>QPainter</strong>. Do not ship QWebEngine. vispy is not the Geometry editor.</li>
-        <li><strong>Owner / license / audience:</strong> Yik (personal); MIT; small private team. No telemetry.</li>
-        <li><strong>Installer:</strong> Inno Setup. Quality + Fast + Scout all ship on 2.0 day-1. Plot Camera moge_level 9 and HiRes 6 stay different.</li>
-        <li><strong>Hub cache (2026-09-02):</strong> On Download models, Hugging Face hub + Xet cache is <code>&lt;install_root&gt;\.hf_cache\</code>
-          (<code>HF_HOME</code>). <code>&lt;install_root&gt;</code> is the folder the user selected in Inno Setup (dev default <code>D:\Votion3DGS</code>).
-          Do <strong>not</strong> write Hub cache to <code>C:\Users\&lt;user&gt;\.cache\huggingface</code>.</li>
-        <li><strong>Download progress (2026-09-03):</strong> During Download models, each Home model-status cell shows its own progress bar
-          (queued empty; the active file shows % from measured bytes). Not log-only.</li>
-        <li><strong>Reconstruct viewport (2026-09-03):</strong> COLMAP sparse cloud (<code>points3D.bin</code> + cameras). Drag orbit, wheel zoom. Not cube-face stills.</li>
-        <li><strong>Tab persistence (2026-09-03):</strong> Switching chips must not wipe generated views. Panorama keeps the 8K ERP (not the green warp). Geometry keeps the last Preview-flight frame and Confirm.</li>
-        <li><strong>Job progress (2026-09-03):</strong> Every background job drives the strip under the chips. Not log-only. Home per-cell download bars stay.</li>
-        <li><strong>Generate dummy PNG (2026-09-04):</strong> <code>ref-hires-mask-split.png</code> is HTML-only. Product never loads it.</li>
-        <li><strong>Generate preview:</strong> three panes — render, mask (white = empty), keyframe. Rail or Joint. Click a rail number to preview.</li>
-        <li><strong>Generate then HiRes (2026-10-30):</strong> WorldStereo first. HiRes all is a separate click and does not auto-start. Wan 2.1, Matrix-3D, and LightX2V are not used.</li>
-        <li><strong>Reconstruct keep/ditch:</strong> Ditch a hallucinated rail (left out of the dataset) or Re-gen that rail. The dataset is known-pose COLMAP, not SphereSfM.</li>
-        <li><strong>Newest sparse (2026-09-04):</strong> After Reconstruct finishes loading, always show the newest kept-rail sparse.</li>
-        <li><strong>Live train viewport (2026-09-05):</strong> Postshot-style raster of the Gaussians while Train / Continue / view-loop runs. Not a point cloud and not stats-only.</li>
-        <li><strong>Max steps (2026-09-05):</strong> any integer ≥ 1. Default in the box may be 10000. <strong>No product cap.</strong></li>
-        <li><strong>Unlocked camera (2026-09-05):</strong> LMB look/orbit, RMB pan, wheel dolly. Zoom is not product-capped.</li>
-        <li><strong>Star reset (2026-09-05):</strong> Reset / default pose is the rails <strong>Star</strong> (origin of every rail). Do not tighten the orbit.</li>
-        <li><strong>Per-Gaussian raster (2026-09-05):</strong> opacity, anisotropic scale, rotation, and color/SH per splat. MCMC Compact uses the same representation as LiteGS.</li>
-        <li><strong>Stop (2026-09-05):</strong> Splat rail and job bar. Continue resumes the last 100-step checkpoint.</li>
-        <li><strong>Anisotropy vs needle takeover (2026-09-05):</strong> elongated / mixed-angle ellipses are the look. Hairline needles taking over, glowing whites, and crushed blacks are bugs (not a Qt overlay).</li>
-        <li><strong>LiteGS backend and licence (2026-09-07):</strong> <code>vendor/litegs/</code> at the SHA in <code>vendor/litegs.sha</code>. Inria Gaussian-Splatting licence (research / evaluation only): vendor as-is, build the three CUDA extensions locally at Setup, never redistribute binaries, licence line in Help. Train is gated on <code>litegs raster 1-step: OK</code> in <code>env_report.txt</code>.</li>
-        <li><strong>MCMC Compact scope (2026-09-07):</strong> Jung &amp; Hong section 3.1 only (clean room): Metropolis-Hastings split threshold toward a target split ratio + stochastic importance prune to the budget. Relighting parts (BRDF, normals, MALA, deferred shading) are out of scope.</li>
-        <li><strong>Shared-memory viewport (2026-09-07):</strong> frames over <code>multiprocessing.shared_memory</code> (2-slot RGB8 ring), Qt polls at 60 Hz, camera over stdin (<code>VIEW</code>). ≤ 1 step latency on camera change (30 fps cap while training), idle view renders only on change. PNG is the fallback.</li>
-        <li><strong>Pause / Resume (2026-09-07):</strong> in-process over stdin; viewport stays live while paused. Stop still kills. Continue resumes <strong>with optimizer and scheduler state</strong>.</li>
-        <li><strong>Real Gaussian budget (2026-09-07):</strong> the budget box (default 3,000,000) is the controller target, no longer decorative.</li>
-        <li><strong>Full-SH export (2026-09-07):</strong> <code>splat.ply</code> carries SH degree 3 (45 <code>f_rest</code>). Export compact prunes opacity &lt; 0.005 and can drop <code>f_rest</code>.</li>
-        <li><strong>Hold-out PSNR (2026-09-07):</strong> optional every-8th-view hold-out reports PSNR each epoch; resolution scale 1 / 0.5 / 0.25.</li>
-        <li><strong>Retrain required (2026-09-07):</strong> params-only checkpoints from the retired gsplat trainer are not loadable.</li>
-        <li><strong>Step-based schedule (2026-09-07):</strong> SH warm-up one band per clamp(steps / 10, 200, 1000); densify between 5 % and 80 % of the steps (LiteGS ~24 cycles, MCMC Compact one cycle per 100 steps like 3DGS); opacity decay at most every 2000 steps; appends / prunes chunk-exact. Training cameras list + GT compare on the Splat page.</li>
-        <li><strong>Gnomonic faces:</strong> The six extra dataset faces are true 90° gnomonic pinholes of the 8K panorama. Known-pose COLMAP writes them. Do not match the raw ERP as a sphere, and do not bend the point cloud to flatten a bowed splat.</li>
-        <li><strong>WorldStereo is the Quality route (2026-10-30):</strong> WorldStereo memory-DMD replaces WAN 2.1, the pano LoRA, LightX2V, ERP HiRes, and SphereSfM. Git history is the only copy of those paths. Up to six views per rail; the default frame layout later became joint generation. The weights licence is still unknown. Yik accepts that risk for the default route.</li>
-        <li><strong>Joint all-rail generation (2026-11-04):</strong> One WorldStereo sample covers every kept rail. Default is 10 frames per rail, 40 frames, out along one rail and back along the next, starting at the star. Per-rail generation stays as the other option (21 front frames).</li>
-        <li><strong>Geometry-locked guide (2026-11-10):</strong> The guide is a mesh from the panorama depth, textured with the 8K pano, with the ground snapped where the panorama saw it. Facade planes are snapped. Thin mask streaks are removed and the edge is feathered so the model fills a region. Empty guide pixels are lifted into a shared layer for later chunks. HiRes composites the pano mesh, that layer, then the frame.</li>
-        <li><strong>Photo paste and one scene depth (2026-11-11):</strong> After the 8K tail, 2D Images pastes the original photo back with a feathered seam. <strong>Detect</strong> fills h_fov from the lens EXIF, or from a MoGe guess when EXIF is missing or the photo was cropped. Panorama depth is one cache under <code>outputs/&lt;scene&gt;/depth</code>. Yik picked <strong>MoGe-2</strong> (MIT) from the alpine bake-off: ground fit 0.70 vs 0.58 for MoGe v1. PaGeR weights are CC BY-NC. A rail plotted on an older depth must be re-plotted before Generate. The depth key is <code>rails/rail_XX.depth_key</code>, which Start over keeps.</li>
-        <li><strong>Geometry editor stays local (2026-11-12):</strong> Dragging a rail point or switching Active rail updates the floor and side views only. It does not rebuild Generate or Reconstruct. Play writes the rail and starts the mesh flight. Confirm rails is what refreshes the other pages.</li>
-      </ol>
-
-      <h3>Measured on this PC (not guessed)</h3>
-      <table>
-        <thead><tr><th>Item</th><th>Fact</th><th>Source</th></tr></thead>
-        <tbody>
-          <tr><td>ComfyUI Python</td><td>3.13 (<code>python313._pth</code>)</td><td><code>D:\ComfyUI_windows_portable_360\python_embeded\python313._pth</code></td></tr>
-          <tr><td>ComfyUI torch</td><td><code>2.13.0+cu130</code> (CUDA 13.0)</td><td><code>torch\version.py</code></td></tr>
-          <tr><td>Required Krea/WAN/LoRA in that <code>models\</code></td><td><strong>Not present</strong> (no <code>.safetensors</code>; no extra_model_paths)</td><td>Inventory 2026-08-31</td></tr>
-          <tr><td>Copy-from-Comfy</td><td>No-op until those files appear</td><td>Same</td></tr>
-          <tr><td>V1 app</td><td>Gradio + WSL2 + WorldFM + <code>train_splat_live.py</code></td><td>Yik Votion WorldFM</td></tr>
-          <tr><td>LiteGS vendor SHA</td><td><code>004b95215c90c36cdaf4b354301132b700ac287b</code> (MooreThreads/LiteGS <code>master</code>)</td><td><code>vendor/litegs.sha</code>, 2026-09-07</td></tr>
-          <tr><td>LiteGS build route</td><td><code>simple-knn</code>, <code>fused_ssim</code>, <code>litegs_fused</code> via MSVC 14.43 + CUDA 12.8 + ninja (pip route; CMake fallback kept). Needed the <code>__CUDACC__</code> guard in <code>compiled_autograd.h</code> and CUDA 12.6 math headers.</td><td><code>env_report.txt</code> <code>## litegs spike</code></td></tr>
-          <tr><td>alpine_01 LiteGS 10k</td><td>972 views, 2.26M Gaussians, ~3.6 min, hold-out PSNR 15.6 dB. Single-view overfit 33.8 dB → raster and optimizer sound; the multi-view gap is WAN + SphereSfM view inconsistency.</td><td>Measured 2026-09-07</td></tr>
-          <tr><td>alpine_01 MCMC Compact 10k</td><td>3DGS cadence (75 cycles of 100 steps), MH acceptance 0.43–0.44 (target 0.44), split ratio 3.4–6.8 % per cycle (target 5 %), 19k → 511k Gaussians (77 % below LiteGS at the same 3M budget), hold-out PSNR 15.7 dB, 94 s (re-run 533k / 15.5 dB); appends / prunes chunk-exact</td><td>Measured 2026-09-07</td></tr>
-          <tr><td>Viewport transport</td><td>camera change → frame median 33 ms idle; 93 fps idle orbit, 32 fps while training at 182 it/s</td><td>Shared-memory bench 2026-09-07</td></tr>
-          <tr><td>alpine_01 cube-face sag</td><td>SphereSfM <code>frame_00000</code> front PNG ~31 % line sag; true 90° gnomonic of the same ERP ~0.2 %. <code>SIMPLE_PINHOLE</code> f=W/2 (90°).</td><td>Measured 2026-09-08</td></tr>
-          <tr><td>alpine_01 photo paste</td><td>8192×4096 paste of a 70° crop: 3.7 s, about 2 GiB. Pixels outside the feather are unchanged.</td><td>Measured 2026-11-11</td></tr>
-          <tr><td>alpine_01 depth bake-off</td><td>Ground fit / facade error / edge match: MoGe v1 0.58 / 0.0055 / 0.39; MoGe-2 0.70 / 0.0042 / 0.44; PaGeR 0.66 / 0.0050 / 0.45; DAP 0.58 / 0.0052 / 0.42. Yik picked MoGe-2.</td><td>2026-11-11</td></tr>
-          <tr><td>alpine_01 MoGe-2 cache</td><td>4096×2048, 158 s, scale 0.890, 80.7 % valid. A second read from <code>depth/</code> was 0.2 s.</td><td>Measured 2026-11-11</td></tr>
-        </tbody>
-      </table>
-
-      <div class="callout warn">
-        <strong>Still unknown — do not invent:</strong> PyTorch cu128 patch number;
-        whether triton-windows / SageAttention wheels exist for Python 3.12 + CUDA 12.8 on Windows (gsplat is moot since the LiteGS move);
-        Warp widget names other than h_fov (range 10–170 step 0.5 is locked);
-        Harmonize / UltimateSDUpscale extra names (copy JSON arrays).
-        Florence Hub, Ostris READY, and h_fov min/max are locked 2026-09-03.
-      </div>
-    </section>
-
     <section id="pipeline">
-      <h2><span class="num">03</span>Pipeline</h2>
-      <h3>Phase 1 inputs (three first-class modes)</h3>
-      <div class="mode-grid">
-        <figure class="fig">
-          <img src="media/matrix3d-i2p.png" alt="Single 2D photo lifted toward a 3D scene" />
-          <figcaption><strong>2D Images</strong> (default) — warp a photo onto green ERP, Krea outpaint, then paste the photo back.</figcaption>
-        </figure>
-        <figure class="fig erp">
-          <img src="media/polyhaven-venice.png" alt="Poly Haven Venice Sunset equirectangular HDRI" />
-          <figcaption><strong>360 Images</strong> — load an existing 2:1 ERP. Skips Krea. <a href="https://polyhaven.com/hdris">Poly Haven</a></figcaption>
-        </figure>
-        <figure class="fig">
-          <img src="media/krea2-hero.jpg" alt="Krea 2 generated imagery for text-to-pano" />
-          <figcaption><strong>text</strong> — Krea 2 Turbo + 360 T2I LoRA. <a href="https://www.krea.ai/blog/krea-2-technical-report">Krea 2</a></figcaption>
-        </figure>
-      </div>
-      <figure class="fig contain">
-        <img src="media/moge-overview.png" alt="MoGe geometry from a single image" />
-        <figcaption>
-          After the 8K ERP: MoGe-2 depth, a mesh guide, then WorldStereo fills what the guide left empty.
-          Source: <a href="https://github.com/microsoft/MoGe">microsoft/MoGe</a>
-        </figcaption>
-      </figure>
-      <div class="pipeline-visual">
-        <a class="pvis" href="Votion_3DGS_2.0_Phase1.html">
-          <img src="media/matrix3d-arxiv-teaser.png" alt="Input image, panoramic video, 3D scene" />
-          <span><b>A · P1 pano</b> 2D / 360 / text → 8K ERP</span>
-        </a>
-        <a class="pvis" href="Votion_3DGS_2.0_Phase2.html">
-          <img src="media/moge-overview.png" alt="MoGe monocular geometry overview" />
-          <span><b>B · P2 MoGe</b> Compute geometry + one rail</span>
-        </a>
-        <a class="pvis" href="Votion_3DGS_2.0_Phase3.html">
-          <img src="media/moge-pano-pipeline.png" alt="Panorama split into views, depth estimated, then merged" />
-          <span><b>C · P3 WorldStereo</b> memory-DMD hole-fill</span>
-        </a>
-        <a class="pvis" href="Votion_3DGS_2.0_Phase3.html">
-          <img src="media/moge-normals.jpg" alt="Surface normals from monocular geometry" />
-          <span><b>D · HiRes</b> 8K reprojection</span>
-        </a>
-        <a class="pvis" href="Votion_3DGS_2.0_Phase2.html">
-          <img src="media/colmap-sparse.webp" alt="COLMAP sparse reconstruction" />
-          <span><b>E · COLMAP</b> known-pose dataset</span>
-        </a>
-        <a class="pvis" href="Votion_3DGS_2.0_Phase4.html">
-          <img src="media/mlslabs-render.jpg" alt="MLSLabsRenderer Unreal Engine splat playback" />
-          <span><b>F · Splat</b> LiteGS / MCMC Compact → Unreal 5.5</span>
-        </a>
-      </div>
-      <div class="pipe">
-        <div class="pipe-node"><b>A P1</b>2D / 360 / text → 8K ERP</div>
-        <div class="pipe-arr">→</div>
-        <div class="pipe-node"><b>B P2</b>MoGe-2 depth · rails</div>
-        <div class="pipe-arr">→</div>
-        <div class="pipe-node"><b>C P3</b>WorldStereo memory-DMD</div>
-        <div class="pipe-arr">→</div>
-        <div class="pipe-node"><b>D</b>HiRes 8K geometry</div>
-        <div class="pipe-arr">→</div>
-        <div class="pipe-node"><b>E</b>known-pose COLMAP</div>
-        <div class="pipe-arr">→</div>
-        <div class="pipe-node out"><b>F</b>LiteGS / MCMC Compact → splat.ply → UE 5.5</div>
-      </div>
-      <p>
-        Dummy of the P0 window (V1 left-rail chrome + six P0 page names). Click through
-        <a href="Votion_3DGS_2.0_Phase0.html">P0</a>–<a href="Votion_3DGS_2.0_Phase4.html">P4</a> for each page.
-      </p>
+      <h2><span class="num">01</span>Pipeline</h2>
+      <ol>
+        <li><strong>Home</strong> downloads the models.</li>
+        <li><strong>Panorama</strong> builds an 8K equirectangular image.</li>
+        <li><strong>Trajectories</strong> plans walks and paints guides.</li>
+        <li><strong>Expand</strong> fills the guides and can upscale them.</li>
+        <li><strong>Dataset</strong> writes the training images, depth, and normals.</li>
+        <li><strong>Splat</strong> trains the splat, optionally refines it, and exports <code>splat.ply</code>.</li>
+      </ol>
+    </section>
+
+    <section id="mockup">
+      <h2><span class="num">02</span>App</h2>
       <div class="desk">
-        <div class="desk-win"><span><strong>Votion 3DGS</strong></span><span class="wbtn">— □ ×</span></div>
+        <div class="desk-win"><span><strong>VotionSplat</strong></span><span class="wbtn">— □ ×</span></div>
+        <img class="desk-banner" src="media/banner.png" alt="" />
         <div class="desk-brand">
-          <h3>Votion 3DGS</h3>
           <span class="live">idle</span>
-          <div class="desk-meta"><span>Quality</span><span>GPU 0</span></div>
+          <div class="desk-meta"><span>RTX 3090</span><span>GPU 0</span></div>
         </div>
-        <div class="desk-stages">
-          <a class="on" href="Votion_3DGS_2.0_Phase0.html">Home</a>
-          <a href="Votion_3DGS_2.0_Phase1.html">Panorama</a>
-          <a href="Votion_3DGS_2.0_Phase2.html#geo">Geometry</a>
-          <a href="Votion_3DGS_2.0_Phase3.html#gen-ui">Generate</a>
-          <a href="Votion_3DGS_2.0_Phase2.html#recon">Reconstruct</a>
-          <a href="Votion_3DGS_2.0_Phase4.html">Splat</a>
-        </div>
+        <div class="desk-stages" id="stages"></div>
         <div class="job-strip">
           <span class="job-cap">idle</span>
           <div class="job-bar"><i style="width:0%"></i></div>
           <span class="job-pct">—</span>
         </div>
         <div class="desk-body">
-          <div class="desk-rail">
-            <label class="f-lab">Scene</label>
-            <input class="f-in" value="alpine_01" readonly />
-            <div class="f-row">
-              <button class="f-btn pri" type="button">Download models</button>
-              <button class="f-btn ghost" type="button">Stop</button>
-            </div>
-          </div>
-          <div class="desk-view">
-            <p class="view-lbl">Happy path</p>
-            <p class="f-hint">2D Images (photo pasted back) or 360 / text → 8K ERP → MoGe-2 depth → rails → WorldStereo → splat.ply. Detect fills h_fov. Ostris is READY.</p>
-          </div>
+          <div class="desk-rail" id="rail"></div>
+          <div class="desk-view" id="view"></div>
         </div>
         <div class="desk-draws">
-        <details class="desk-log-draw"><summary>Log</summary><div class="desk-log"><b>STATUS // idle</b><br />No ComfyUI. No WSL. Qt never imports torch for inference.</div></details>
-        <details class="desk-log-draw"><summary>Help</summary><div class="desk-log">
-          <b>FIELD GUIDE</b><br />
-          2D Images (default) or 360 / text → 8K ERP → Compute geometry → rails → Generate → splat.ply (LiteGS or MCMC Compact).
-          Ostris Edit is native READY. h_fov 10–170, type or drag, default 70. Surroundings always end with no peoples, no cars.
-          Left 2:1 Fit / 100% + draggable split. Right 360 is spherical (yaw + pitch). text keeps the trigger prefix.
-          After 2D Images, the original photo is pasted back and prompt.txt = outpaint instruction + surroundings.
-          Detect fills h_fov. Dragging a rail point does not rebuild Generate. Play writes the rail. Four rails usually enough. Extra rails do not fix glass.
-        </div></details>
+          <details class="desk-log-draw"><summary>Log</summary><div class="desk-log"><b>STATUS // idle</b><br />The window stays up while a stage runs.</div></details>
+          <details class="desk-log-draw"><summary>Help</summary><div class="desk-log">Six stages. Green means that model is on disk. Export for Unreal needs no extra settings.</div></details>
         </div>
       </div>
-      <div class="callout good">
-        Quality generation is WorldStereo memory-DMD on one 3090. Sharpness is the 8K panorama through the MoGe-2 mesh, not a bigger video model and <strong>not SeedVR</strong>.
-        All rails start at the pano-center star so that 8K texture can reproject. Preview the mesh flight before Generate.
-        Four rails is usually enough; extra rails buy volume, not sharper views, and do not fix glass.
-        Keep view-dependent reflections (why 3DGS, why Marble was rejected).
-      </div>
-      <p>
-        V1 is not upgraded. Do not re-open: slice-and-SHARP (seams + non-commercial), UniSHARP (falls apart off-center),
-        HY-World 2.0 (two huge models, four GPUs), Lyra (91 GB, Linux, ~6 min start), Marble (closed, small roam, dead reflections).
-        Current path: Krea 2 panorama, MoGe-2 depth, WorldStereo memory-DMD, pinhole HiRes, known-pose COLMAP, LiteGS or MCMC Compact. Wan 2.1 I2V, Matrix-3D, and LightX2V are not in this build.
-      </p>
-    </section>
-
-    <section id="tree">
-      <h2><span class="num">04</span>Target tree</h2>
-      <pre>D:\Votion3DGS\
-  app\                 PySide6
-  engine\              pipeline + workers (subprocess isolation)
-  vendor\splatkit\     core/ + shim/ (MIT, no ComfyUI imports)
-  vendor\moge\
-  bin\                 colmap_sphere.exe
-  .hf_cache\           Hub + Xet cache (install folder the user chose; not C:\Users\…\.cache)
-  models\              ready weights (HF download / Comfy copy)
-  outputs\&lt;scene&gt;\
-  docs\                these phase plans
-  tools\               download_models.py, model_manifest.json
-  requirements.lock    written in Phase 0 — not invented now</pre>
     </section>
 
     <section id="models">
-      <h2><span class="num">05</span>Model files</h2>
-      <p>
-        Filenames and URLs copied from MarkdownNote nodes in
-        <code>d:\AI_3DGS\260825_MICKMUMPITZ_Krea2-360Pano-Creator_1-0.json</code> and
-        <code>d:\AI_3DGS\260825_MICKMUMPITZ_3DGS-Dataset-Creator_1-0_SMPL.json</code>.
-        Sizes are omitted unless a source stated them.
-        Download into <code>&lt;install_root&gt;\models\</code>. Hub blobs land in <code>&lt;install_root&gt;\.hf_cache\</code> first, not <code>C:\Users\&lt;user&gt;\.cache\huggingface</code>.
-      </p>
-      <h3>Panorama (Phase 1; downloader can fetch in Phase 0)</h3>
+      <h2><span class="num">03</span>Models</h2>
+      <p>Core is about 78 GB. Optional is about 7 GB. SAM 3 ships in the installer. The rest download from Home.</p>
       <table>
-        <thead><tr><th>File</th><th>Folder</th><th>Source</th></tr></thead>
+        <thead><tr><th>Model</th><th>Stage</th><th>GB</th><th>Group</th></tr></thead>
         <tbody>
-          <tr><td><code>krea2_turbo_fp8_scaled.safetensors</code></td><td>diffusion_models</td><td><a href="https://huggingface.co/Comfy-Org/Krea-2/resolve/main/diffusion_models/krea2_turbo_fp8_scaled.safetensors">Comfy-Org/Krea-2</a></td></tr>
-          <tr><td><code>krea2_t2i_360_erp_lora_v1.safetensors</code></td><td>loras</td><td><a href="https://huggingface.co/mickmumpitz/Krea2-360-ERP-LoRAs/resolve/main/krea2_t2i_360_erp_lora_v1.safetensors">Krea2-360-ERP-LoRAs</a></td></tr>
-          <tr><td><code>krea2_oedit_360_erp_outpaint_lora_v1.safetensors</code></td><td>loras</td><td><a href="https://huggingface.co/mickmumpitz/Krea2-360-ERP-LoRAs/resolve/main/krea2_oedit_360_erp_outpaint_lora_v1.safetensors">same repo</a></td></tr>
-          <tr><td><code>qwen3vl_4b_fp8_scaled.safetensors</code></td><td>text_encoders</td><td><a href="https://huggingface.co/Comfy-Org/Krea-2/resolve/main/text_encoders/qwen3vl_4b_fp8_scaled.safetensors">Comfy-Org/Krea-2</a></td></tr>
-          <tr><td>Krea VAE</td><td>vae</td><td><a href="https://huggingface.co/Comfy-Org/Krea-2">Comfy-Org/Krea-2</a> panorama decode</td></tr>
-          <tr><td><code>RealESRGAN_x2.pth</code></td><td>upscale_models</td><td><a href="https://huggingface.co/ai-forever/Real-ESRGAN/resolve/main/RealESRGAN_x2.pth">ai-forever/Real-ESRGAN</a></td></tr>
-        </tbody>
-      </table>
-      <p>Optional nvfp4 Krea file is for RTX 50xx — <strong>not</strong> the 3090 Quality default.</p>
-      <h3>Generate and HiRes</h3>
-      <table>
-        <thead><tr><th>File</th><th>Folder</th><th>Source</th></tr></thead>
-        <tbody>
-          <tr><td>WorldStereo memory-DMD FP8</td><td>weights</td><td><a href="https://huggingface.co/apozz/WorldStereo-fp8">apozz/WorldStereo-fp8</a></td></tr>
-          <tr><td><code>dinov2-base</code></td><td>weights</td><td><a href="https://huggingface.co/facebook/dinov2-base">facebook/dinov2-base</a></td></tr>
-          <tr><td><code>umt5_xxl_fp8_e4m3fn_scaled.safetensors</code></td><td>text_encoders</td><td>text encoder WorldStereo loads</td></tr>
-          <tr><td><code>clip_vision_h.safetensors</code></td><td>clip_vision</td><td>vision encoder WorldStereo loads</td></tr>
-          <tr><td>MoGe-2 <code>Ruicheng/moge-2-vitl-normal</code></td><td><code>.venvs/depth_moge2</code></td><td>scene depth. MoGe v1 <code>model.pt</code> stays for Detect when a photo has no lens EXIF.</td></tr>
-          <tr><td><code>4x-UltraSharp.pth</code></td><td>upscale_models</td><td><a href="https://huggingface.co/Kim2091/UltraSharp/blob/main/4x-UltraSharp.pth">Kim2091/UltraSharp</a> — HiRes holes only</td></tr>
-        </tbody>
-      </table>
-      <p>Florence-2 (optional caption): <code>florence-community/Florence-2-large</code>.</p>
-    </section>
-
-    <section id="vram">
-      <h2><span class="num">06</span>VRAM profiles</h2>
-      <table>
-        <thead><tr><th>Profile</th><th>Assumption</th><th>Generator</th><th>HiRes</th><th>Rails</th></tr></thead>
-        <tbody>
-          <tr><td><strong>Quality</strong> (locked)</td><td>RTX 3090 24GB</td><td>WorldStereo memory-DMD FP8</td><td>Pinhole, 2× keyframe</td><td>4</td></tr>
-          <tr><td>Fast</td><td>—</td><td>Not in this build</td><td>—</td><td>—</td></tr>
-          <tr><td>Scout</td><td>—</td><td>Not in this build</td><td>—</td><td>—</td></tr>
+          <tr><td>Krea 2</td><td>Panorama</td><td>13.14</td><td>core</td></tr>
+          <tr><td>Krea 2 text encoder</td><td>Panorama</td><td>5.24</td><td>core</td></tr>
+          <tr><td>VAE</td><td>Panorama</td><td>0.25</td><td>core</td></tr>
+          <tr><td>Krea 2 360 ERP LoRA</td><td>Panorama</td><td>0.23</td><td>core</td></tr>
+          <tr><td>Krea 2 360 outpaint LoRA</td><td>Panorama</td><td>0.23</td><td>core</td></tr>
+          <tr><td>RealESRGAN x2</td><td>Panorama</td><td>0.07</td><td>core</td></tr>
+          <tr><td>MoGe</td><td>Panorama</td><td>1.26</td><td>core</td></tr>
+          <tr><td>Qwen3-VL 8B</td><td>Trajectories</td><td>17.55</td><td>core</td></tr>
+          <tr><td>ZIM</td><td>Trajectories</td><td>1.26</td><td>core</td></tr>
+          <tr><td>Grounding DINO</td><td>Trajectories</td><td>0.69</td><td>core</td></tr>
+          <tr><td>MoGe 2</td><td>Trajectories</td><td>1.32</td><td>core</td></tr>
+          <tr><td>SAM 3</td><td>Trajectories</td><td>3.45</td><td>core</td></tr>
+          <tr><td>WorldStereo</td><td>Expand</td><td>20.36</td><td>core</td></tr>
+          <tr><td>WorldStereo config</td><td>Expand</td><td>0.00</td><td>core</td></tr>
+          <tr><td>480P config</td><td>Expand</td><td>0.00</td><td>core</td></tr>
+          <tr><td>720P configs</td><td>Expand</td><td>0.02</td><td>core</td></tr>
+          <tr><td>UMT5</td><td>Expand</td><td>6.74</td><td>core</td></tr>
+          <tr><td>CLIP vision</td><td>Expand</td><td>1.26</td><td>core</td></tr>
+          <tr><td>DINOv2</td><td>Expand</td><td>0.35</td><td>core</td></tr>
+          <tr><td>SeedVR2 3B</td><td>HiRes</td><td>3.39</td><td>core</td></tr>
+          <tr><td>SeedVR2 VAE</td><td>HiRes</td><td>0.50</td><td>core</td></tr>
+          <tr><td>LPIPS VGG16</td><td>Splat</td><td>0.55</td><td>core</td></tr>
+          <tr><td>Difix</td><td>Splat</td><td>5.17</td><td>optional</td></tr>
+          <tr><td>Florence-2</td><td>Panorama</td><td>1.56</td><td>optional</td></tr>
         </tbody>
       </table>
     </section>
 
-    <section id="visuals">
-      <h2><span class="num">07</span>Visual sources (from Org_Idea.md)</h2>
-      <p>
-        Stills grabbed from the project pages and repos listed in
-        <a href="Org_Idea.md">Org_Idea.md</a>. They illustrate the idea — they are not Votion UI mocks.
-      </p>
-      <h3>Selected pipeline (in 2.0)</h3>
-      <div class="fig-grid">
-        <figure class="fig">
-          <img src="media/krea2-hero.jpg" alt="Krea 2 generated imagery" />
-          <figcaption><a href="https://www.krea.ai/blog/krea-2-technical-report">Krea 2</a> — P1 generate</figcaption>
-        </figure>
-        <figure class="fig">
-          <img src="media/florence2-hf.png" alt="Microsoft Florence-2 on Hugging Face" />
-          <figcaption><a href="https://huggingface.co/microsoft/Florence-2-large">Florence-2</a> — optional 2D caption</figcaption>
-        </figure>
-        <figure class="fig">
-          <img src="media/moge-overview.png" alt="MoGe geometry overview" />
-          <figcaption><a href="https://github.com/microsoft/MoGe">MoGe</a> — P2 mesh</figcaption>
-        </figure>
-        <figure class="fig">
-          <img src="media/mlslabs-render.jpg" alt="MLSLabsRenderer Unreal splat" />
-          <figcaption><a href="https://github.com/mlslabs/MLSLabsGaussianSplattingRenderer-UE">MLSLabsRenderer</a> — UE 5.5</figcaption>
-        </figure>
-      </div>
-      <h3>Evaluated, not selected (stay archived)</h3>
-      <div class="fig-grid">
-        <figure class="fig">
-          <img src="media/sharp-teaser.jpg" alt="Apple SHARP single-image Gaussian view synthesis" />
-          <figcaption><a href="https://apple.github.io/ml-sharp/">Apple SHARP</a> — non-commercial</figcaption>
-        </figure>
-        <figure class="fig">
-          <img src="media/unisharp-og.png" alt="Insta360 UniSHARP GitHub preview" />
-          <figcaption><a href="https://github.com/Insta360-Research-Team/UniSHARP">UniSHARP</a> — off-center geometry breaks</figcaption>
-        </figure>
-        <figure class="fig">
-          <img src="media/hyworld-og.png" alt="Tencent HY-World 2.0 GitHub preview" />
-          <figcaption><a href="https://github.com/Tencent-Hunyuan/HY-World-2.0">HY-World 2.0</a> — four GPUs</figcaption>
-        </figure>
-        <figure class="fig">
-          <img src="media/lyra-method.png" alt="NVIDIA Lyra method diagram" />
-          <figcaption><a href="https://github.com/nv-tlabs/lyra">NVIDIA Lyra</a> — 91 GB, Linux</figcaption>
-        </figure>
-        <figure class="fig">
-          <img src="media/marble-og.jpeg" alt="World Labs Marble" />
-          <figcaption><a href="https://marble.worldlabs.ai/">World Labs Marble</a> — closed; small roam; no reflections</figcaption>
-        </figure>
-        <figure class="fig">
-          <img src="media/seedvr-teaser.png" alt="ByteDance SeedVR teaser" />
-          <figcaption><a href="https://github.com/ByteDance-Seed/SeedVR">SeedVR2</a> — tried; slow; P5 only</figcaption>
-        </figure>
-      </div>
+    <section id="unreal">
+      <h2><span class="num">04</span>Unreal export</h2>
+      <p>The default export is <strong>Unreal / VotionSplat Export</strong>. Drag <code>splat.ply</code> into the Content Browser with VotionSplat-UnrealPlugin. No settings. The file keeps the trained splats, and the plugin draws them with the same rule as the app viewport.</p>
+      <p>The other presets are 3DGS / sRGB, and Linear Rec.709 tagged for other engines.</p>
     </section>
 
-    <section id="p5">
-      <h2><span class="num">08</span>P5 stretch (not a 2.0 blocker)</h2>
-      <ul>
-        <li>SeedVR2 as an experiment only — not a substitute for the 8K panorama through the mesh</li>
-        <li>macOS is not supported. This build is Windows.</li>
-      </ul>
-      <figure class="fig">
-        <img src="media/seedvr-teaser.png" alt="SeedVR restoration teaser" />
-        <figcaption>SeedVR teaser — P5 experiment only. Source: <a href="https://github.com/ByteDance-Seed/SeedVR">ByteDance-Seed/SeedVR</a></figcaption>
-      </figure>
-    </section>
-
-    <footer>
-      Votion 3DGS 2.0 · also at <code>D:\Votion3DGS\docs</code> · markdown siblings in this folder
-      · stills from sources in <a href="Org_Idea.md">Org_Idea.md</a>
-    </footer>
+    <p class="tagline">VotionSplat 3.0 · Yik · MIT</p>
   </div>
+  <script>
+    const stages = [
+      ["home", "Home"],
+      ["panorama", "Panorama"],
+      ["trajectories", "Trajectories"],
+      ["expand", "Expand"],
+      ["dataset", "Dataset"],
+      ["splat", "Splat"]
+    ];
+    const pages = {
+      home: {
+        rail: `<p class="f-hint">Core (required, about 78 GB)</p>
+          <p class="f-hint">Core + optional (Difix, captions)</p>
+          <div class="f-row"><button class="f-btn pri" type="button">Download models</button><button class="f-btn ghost" type="button">Stop</button></div>
+          <p class="group-lab f-lab">Core</p>
+          <div class="mcard"><b>Krea 2</b>Panorama · 13.14 GB<div class="ready">READY</div></div>
+          <div class="mcard"><b>Qwen3-VL 8B</b>Trajectories · 17.55 GB<div class="ready">READY</div></div>
+          <div class="mcard"><b>SAM 3</b>Trajectories · 3.45 GB<div class="ready">READY</div></div>
+          <div class="mcard"><b>WorldStereo</b>Expand · 20.36 GB<div class="ready">READY</div></div>
+          <p class="group-lab f-lab">Optional</p>
+          <div class="mcard"><b>Difix</b>Splat · 5.17 GB<div class="ready">READY</div></div>
+          <div class="mcard"><b>Florence-2</b>Panorama · 1.56 GB<div class="ready">READY</div></div>`,
+        view: `<p class="view-lbl">Models</p><p class="f-hint">Green is ready. A missing core model blocks that stage.</p>`
+      },
+      panorama: {
+        rail: `<button class="f-btn" type="button">2D Images</button>
+          <button class="f-btn" type="button">360 Images</button>
+          <label class="f-lab">Sentence</label><input class="f-in" value="a quiet alpine meadow" readonly />
+          <div class="f-row"><button class="f-btn" type="button">Detect</button><button class="f-btn" type="button">Caption</button></div>
+          <div class="f-row"><button class="f-btn pri" type="button">Generate</button><button class="f-btn ghost" type="button">Stop</button></div>
+          <button class="f-btn" type="button">Use as pano.png</button>
+          <button class="f-btn" type="button">Upscale to 8K</button>
+          <div class="f-row"><button class="f-btn" type="button">Fit</button><button class="f-btn" type="button">100%</button></div>`,
+        view: `<p class="view-lbl">Panorama</p><p class="f-hint">Output is outputs/&lt;scene&gt;/pano.png. Horizontal field of view, 10–170, step 0.5.</p>`
+      },
+      trajectories: {
+        rail: `<label class="f-lab">Scene type</label><input class="f-in" value="Auto" readonly />
+          <p class="f-hint">Navigation paths</p><p class="f-hint">Upward routes</p><p class="f-hint">Reconstruction loops</p>
+          <p class="f-hint">Start over (archive the old plan)</p>
+          <label class="f-lab">Extra views per kind</label><input class="f-in" value="2" readonly />
+          <button class="f-btn pri" type="button">Plan trajectories</button>
+          <button class="f-btn" type="button">Render guides</button>
+          <button class="f-btn ghost" type="button">Stop</button>`,
+        view: `<p class="view-lbl">Guides</p><p class="f-hint">Origin views are always kept. A kept wonder, target, or reconstruct view keeps all of its paths.</p>`
+      },
+      expand: {
+        rail: `<button class="f-btn pri" type="button">Profile first path</button>
+          <button class="f-btn pri" type="button">Expand kept paths</button>
+          <button class="f-btn" type="button">Regenerate selected</button>
+          <button class="f-btn" type="button">Align</button>
+          <button class="f-btn" type="button">HiRes all</button>
+          <button class="f-btn" type="button">HiRes selected</button>
+          <button class="f-btn ghost" type="button">Stop</button>
+          <label class="f-lab">GPU memory</label><input class="f-in" value="Auto (fit this machine)" readonly />
+          <label class="f-lab">HiRes scale</label><input class="f-in" value="2x (1664x960)" readonly />`,
+        view: `<p class="view-lbl">Expand</p><p class="f-hint">Clips, aligned cloud, and HiRes land under outputs/&lt;scene&gt;/hyworld.</p>`
+      },
+      dataset: {
+        rail: `<label class="f-lab">Panorama density</label><input class="f-in" value="2" readonly />
+          <label class="f-lab">Upper polar density</label><input class="f-in" value="4" readonly />
+          <button class="f-btn pri" type="button">Build dataset</button>
+          <button class="f-btn ghost" type="button">Stop</button>`,
+        view: `<p class="view-lbl">Dataset</p><p class="f-hint">Images, depth, and normals for the splat trainer.</p>`
+      },
+      splat: {
+        rail: `<button class="f-btn pri" type="button">Train</button>
+          <button class="f-btn" type="button">Continue training</button>
+          <button class="f-btn" type="button">Pause/Resume</button>
+          <button class="f-btn ghost" type="button">Stop</button>
+          <p class="f-hint">Difix3D+ refine (evaluation only)</p>
+          <label class="f-lab">Export</label><input class="f-in" value="Unreal / VotionSplat Export" readonly />
+          <button class="f-btn pri" type="button">Export splat.ply</button>
+          <button class="f-btn" type="button">Open result folder</button>`,
+        view: `<p class="view-lbl">Splat</p><p class="f-hint">Unreal / VotionSplat Export: drag splat.ply into the Content Browser with VotionSplat-UnrealPlugin. No settings.</p>`
+      }
+    };
+    const stageBar = document.getElementById("stages");
+    stages.forEach(([id, label]) => {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.textContent = label;
+      button.dataset.stage = id;
+      button.addEventListener("click", () => show(id));
+      stageBar.appendChild(button);
+    });
+    function show(id) {
+      document.querySelectorAll("#stages button").forEach((button) => {
+        button.classList.toggle("on", button.dataset.stage === id);
+      });
+      document.getElementById("rail").innerHTML = pages[id].rail;
+      document.getElementById("view").innerHTML = pages[id].view;
+    }
+    show("home");
+  </script>
 </body>
 </html>
