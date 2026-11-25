@@ -8,195 +8,94 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="votion-plan.css" />
+  <link rel="stylesheet" href="site.css" />
 </head>
 <body>
+  <div class="hero-banner"><img src="media/repo_banner.png" alt="VotionSplat" /></div>
+
   <div class="wrap">
     <header class="hero">
-      <img src="media/repo_banner.png" alt="VotionSplat" style="width:100%;height:auto;background:#000" />
-      <p class="eyebrow">Windows · PySide6 · Unreal</p>
+      <p class="eyebrow">Windows · PySide6 · Unreal Engine 5.5</p>
       <h1>VotionSplat 3.0</h1>
       <p class="tagline">A photo, a 360 panorama, or a sentence becomes a Gaussian splat for Unreal.</p>
+      <div class="links">
+        <a class="pri" href="https://github.com/TitanothereYik/VotionSplat-UnrealPlugin">VotionSplat-UnrealPlugin</a>
+        <a href="https://github.com/TitanothereYik/VotionSplat">VotionSplat app</a>
+        <a href="#unreal">Unreal export</a>
+        <a href="#models">Models</a>
+      </div>
+      <div class="callout">
+        <strong>For the best result in Unreal, use <a href="https://github.com/TitanothereYik/VotionSplat-UnrealPlugin">VotionSplat-UnrealPlugin</a>.</strong>
+        It draws <code>splat.ply</code> with the same rasterizer rule, near plane, and spherical-harmonic degree the splat was trained with, so Unreal shows what the app viewport shows.
+      </div>
     </header>
+  </div>
 
+  <div class="app-section" id="app-mockup">
+    <div class="wrap" style="padding:0">
+      <h2><span class="num">01</span>The app</h2>
+      <p>This is the 3.0 window at 1600 × 1000 with the real layout and labels. Click the stage tabs, the view chips, the lists, and the Panorama input modes. Buttons only write to the log; nothing runs.</p>
+    </div>
+    <div class="win">
+      <div class="win-title"><img src="media/icon.png" alt="" />VotionSplat 3.0.1<span class="ctl">—□✕</span></div>
+      <div class="frame">
+        <div class="app" id="app">
+          <div class="a-banner"><img src="media/banner.png" alt="VotionSplat" /></div>
+          <div class="a-brand"><span class="a-live">idle</span><span class="sp"></span><span class="a-meta">NVIDIA GeForce RTX 3090</span><span class="a-meta">GPU 0</span></div>
+          <div class="a-stages"></div>
+          <div class="a-job"><span class="lab"></span><span class="bar"><i></i></span><span class="pct"></span><button class="stop" type="button">Stop</button></div>
+          <div class="a-body"></div>
+          <div class="a-handle"></div>
+          <div class="a-draws">
+            <div class="a-draw"><button class="tg" type="button">Log</button><div class="pane" id="log"></div></div>
+            <div class="a-draw"><button class="tg" type="button">Help</button><div class="pane" id="help"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p class="note">Best on a desktop browser. Screenshots of the same pages are in the <a href="https://github.com/TitanothereYik/VotionSplat#readme">README</a>.</p>
+  </div>
+
+  <div class="wrap">
     <section id="pipeline">
-      <h2><span class="num">01</span>Pipeline</h2>
+      <h2><span class="num">02</span>Pipeline</h2>
       <ol>
         <li><strong>Home</strong> downloads the models.</li>
-        <li><strong>Panorama</strong> builds an 8K equirectangular image.</li>
-        <li><strong>Trajectories</strong> plans walks and paints guides.</li>
-        <li><strong>Expand</strong> fills the guides and can upscale them.</li>
+        <li><strong>Panorama</strong> builds an 8K equirectangular image from a photo, a 360 file, or a sentence.</li>
+        <li><strong>Trajectories</strong> plans walks through the panorama and paints guides.</li>
+        <li><strong>Expand</strong> fills the guides, aligns them, and can upscale them (HiRes).</li>
         <li><strong>Dataset</strong> writes the training images, depth, and normals.</li>
         <li><strong>Splat</strong> trains the splat, optionally refines it, and exports <code>splat.ply</code>.</li>
       </ol>
     </section>
 
-    <section id="mockup">
-      <h2><span class="num">02</span>App</h2>
-      <div class="desk">
-        <div class="desk-win"><span><strong>VotionSplat</strong></span><span class="wbtn">— □ ×</span></div>
-        <img class="desk-banner" src="media/banner.png" alt="" />
-        <div class="desk-brand">
-          <span class="live">idle</span>
-          <div class="desk-meta"><span>RTX 3090</span><span>GPU 0</span></div>
-        </div>
-        <div class="desk-stages" id="stages"></div>
-        <div class="job-strip">
-          <span class="job-cap">idle</span>
-          <div class="job-bar"><i style="width:0%"></i></div>
-          <span class="job-pct">—</span>
-        </div>
-        <div class="desk-body">
-          <div class="desk-rail" id="rail"></div>
-          <div class="desk-view" id="view"></div>
-        </div>
-        <div class="desk-draws">
-          <details class="desk-log-draw"><summary>Log</summary><div class="desk-log"><b>STATUS // idle</b><br />The window stays up while a stage runs.</div></details>
-          <details class="desk-log-draw"><summary>Help</summary><div class="desk-log">Six stages. Green means that model is on disk. Export for Unreal needs no extra settings.</div></details>
-        </div>
+    <section id="unreal">
+      <h2><span class="num">03</span>Unreal</h2>
+      <div class="callout">
+        <strong>Use <a href="https://github.com/TitanothereYik/VotionSplat-UnrealPlugin">VotionSplat-UnrealPlugin</a> for the best result.</strong>
+        Unreal Engine 5.5, Win64.
       </div>
+      <ol>
+        <li>On the Splat page, export with <strong>Unreal / VotionSplat Export</strong>, the default.</li>
+        <li>Drag <code>outputs\&lt;scene&gt;\hyworld\splat.ply</code> into the Content Browser of a project that has the plugin. There is no import dialog.</li>
+      </ol>
+      <p>The export writes Votion tags into the PLY header: the rasterizer, the near plane, and the spherical-harmonic degree. The plugin reads them and draws the splats with the rule the trainer used. A generic 3DGS plugin can load the same file, but it draws with its own rule and colour handling, so it will not match the app viewport.</p>
+      <p>The other two export presets are for tools outside Unreal: <strong>3DGS / sRGB</strong> (Brush, Postshot, SuperSplat) and <strong>Linear Rec.709</strong>, tagged for other engines.</p>
     </section>
 
     <section id="models">
-      <h2><span class="num">03</span>Models</h2>
-      <p>Core is about 78 GB. Optional is about 7 GB. SAM 3 ships in the installer. The rest download from Home.</p>
+      <h2><span class="num">04</span>Models</h2>
+      <p>Core is about 78 GB. Optional is about 7 GB. SAM 3 ships in the installer. Home downloads the rest.</p>
       <table>
         <thead><tr><th>Model</th><th>Stage</th><th>GB</th><th>Group</th></tr></thead>
-        <tbody>
-          <tr><td>Krea 2</td><td>Panorama</td><td>13.14</td><td>core</td></tr>
-          <tr><td>Krea 2 text encoder</td><td>Panorama</td><td>5.24</td><td>core</td></tr>
-          <tr><td>VAE</td><td>Panorama</td><td>0.25</td><td>core</td></tr>
-          <tr><td>Krea 2 360 ERP LoRA</td><td>Panorama</td><td>0.23</td><td>core</td></tr>
-          <tr><td>Krea 2 360 outpaint LoRA</td><td>Panorama</td><td>0.23</td><td>core</td></tr>
-          <tr><td>RealESRGAN x2</td><td>Panorama</td><td>0.07</td><td>core</td></tr>
-          <tr><td>MoGe</td><td>Panorama</td><td>1.26</td><td>core</td></tr>
-          <tr><td>Qwen3-VL 8B</td><td>Trajectories</td><td>17.55</td><td>core</td></tr>
-          <tr><td>ZIM</td><td>Trajectories</td><td>1.26</td><td>core</td></tr>
-          <tr><td>Grounding DINO</td><td>Trajectories</td><td>0.69</td><td>core</td></tr>
-          <tr><td>MoGe 2</td><td>Trajectories</td><td>1.32</td><td>core</td></tr>
-          <tr><td>SAM 3</td><td>Trajectories</td><td>3.45</td><td>core</td></tr>
-          <tr><td>WorldStereo</td><td>Expand</td><td>20.36</td><td>core</td></tr>
-          <tr><td>WorldStereo config</td><td>Expand</td><td>0.00</td><td>core</td></tr>
-          <tr><td>480P config</td><td>Expand</td><td>0.00</td><td>core</td></tr>
-          <tr><td>720P configs</td><td>Expand</td><td>0.02</td><td>core</td></tr>
-          <tr><td>VAE config</td><td>Expand</td><td>0.00</td><td>core</td></tr>
-          <tr><td>UMT5</td><td>Expand</td><td>6.74</td><td>core</td></tr>
-          <tr><td>CLIP vision</td><td>Expand</td><td>1.26</td><td>core</td></tr>
-          <tr><td>DINOv2</td><td>Expand</td><td>0.35</td><td>core</td></tr>
-          <tr><td>SeedVR2 3B</td><td>HiRes</td><td>3.39</td><td>core</td></tr>
-          <tr><td>SeedVR2 VAE</td><td>HiRes</td><td>0.50</td><td>core</td></tr>
-          <tr><td>LPIPS VGG16</td><td>Splat</td><td>0.55</td><td>core</td></tr>
-          <tr><td>Difix</td><td>Splat</td><td>5.17</td><td>optional</td></tr>
-          <tr><td>Florence-2</td><td>Panorama</td><td>1.56</td><td>optional</td></tr>
-        </tbody>
+        <tbody id="models-body"></tbody>
       </table>
     </section>
 
-    <section id="unreal">
-      <h2><span class="num">04</span>Unreal export</h2>
-      <p>The default export is <strong>Unreal / VotionSplat Export</strong>. Drag <code>splat.ply</code> into the Content Browser with VotionSplat-UnrealPlugin. No settings. The file keeps the trained splats, and the plugin draws them with the same rule as the app viewport.</p>
-      <p>The other presets are 3DGS / sRGB, and Linear Rec.709 tagged for other engines.</p>
-    </section>
-
-    <p class="tagline">VotionSplat 3.0 · Yik · MIT</p>
+    <footer>VotionSplat 3.0 · Yik · MIT · <a href="https://github.com/TitanothereYik/VotionSplat">github.com/TitanothereYik/VotionSplat</a></footer>
   </div>
-  <script>
-    const stages = [
-      ["home", "Home"],
-      ["panorama", "Panorama"],
-      ["trajectories", "Trajectories"],
-      ["expand", "Expand"],
-      ["dataset", "Dataset"],
-      ["splat", "Splat"]
-    ];
-    const pages = {
-      home: {
-        rail: `<p class="f-hint">Core (required, about 78 GB)</p>
-          <p class="f-hint">Core + optional (Difix, captions)</p>
-          <div class="f-row"><button class="f-btn pri" type="button">Download models</button><button class="f-btn ghost" type="button">Stop</button></div>
-          <p class="group-lab f-lab">Core</p>
-          <div class="mcard"><b>Krea 2</b>Panorama · 13.14 GB<div class="ready">READY</div></div>
-          <div class="mcard"><b>Qwen3-VL 8B</b>Trajectories · 17.55 GB<div class="ready">READY</div></div>
-          <div class="mcard"><b>SAM 3</b>Trajectories · 3.45 GB<div class="ready">READY</div></div>
-          <div class="mcard"><b>WorldStereo</b>Expand · 20.36 GB<div class="ready">READY</div></div>
-          <p class="group-lab f-lab">Optional</p>
-          <div class="mcard"><b>Difix</b>Splat · 5.17 GB<div class="ready">READY</div></div>
-          <div class="mcard"><b>Florence-2</b>Panorama · 1.56 GB<div class="ready">READY</div></div>`,
-        view: `<p class="view-lbl">Models</p><p class="f-hint">Green is ready. A missing core model blocks that stage.</p>`
-      },
-      panorama: {
-        rail: `<button class="f-btn" type="button">2D Images</button>
-          <button class="f-btn" type="button">360 Images</button>
-          <button class="f-btn" type="button">text</button>
-          <label class="f-lab">Surroundings</label>
-          <p class="f-hint">Type a sentence · Florence-2 caption, then edit</p>
-          <input class="f-in" value="a quiet alpine meadow" readonly />
-          <div class="f-row"><button class="f-btn" type="button">Detect</button><button class="f-btn" type="button">Caption</button></div>
-          <div class="f-row"><button class="f-btn pri" type="button">Generate</button><button class="f-btn ghost" type="button">Stop</button></div>
-          <button class="f-btn" type="button">Use as pano.png</button>
-          <button class="f-btn" type="button">Upscale to 8K</button>
-          <div class="f-row"><button class="f-btn" type="button">Fit</button><button class="f-btn" type="button">100%</button></div>`,
-        view: `<p class="view-lbl">Panorama</p><p class="f-hint">Output is outputs/&lt;scene&gt;/pano.png. Horizontal field of view, 10–170, step 0.5.</p>`
-      },
-      trajectories: {
-        rail: `<label class="f-lab">Scene type</label><input class="f-in" value="Auto" readonly />
-          <p class="f-hint">Navigation paths</p><p class="f-hint">Upward routes</p><p class="f-hint">Reconstruction loops</p>
-          <p class="f-hint">Start over (archive the old plan)</p>
-          <label class="f-lab">Extra views per kind</label><input class="f-in" value="2" readonly />
-          <button class="f-btn pri" type="button">Plan trajectories</button>
-          <button class="f-btn" type="button">Render guides</button>
-          <button class="f-btn ghost" type="button">Stop</button>`,
-        view: `<p class="view-lbl">Guides</p><p class="f-hint">Origin views are always kept. A kept wonder, target, or reconstruct view keeps all of its paths.</p>`
-      },
-      expand: {
-        rail: `<button class="f-btn pri" type="button">Profile first path</button>
-          <button class="f-btn pri" type="button">Expand kept paths</button>
-          <button class="f-btn" type="button">Regenerate selected</button>
-          <button class="f-btn" type="button">Align</button>
-          <button class="f-btn" type="button">HiRes all</button>
-          <button class="f-btn" type="button">HiRes selected</button>
-          <button class="f-btn ghost" type="button">Stop</button>
-          <label class="f-lab">GPU memory</label><input class="f-in" value="Auto (fit this machine)" readonly />
-          <label class="f-lab">HiRes scale</label><input class="f-in" value="2x (1664x960)" readonly />
-          <label class="f-lab">HiRes memory</label><input class="f-in" value="Auto (fit this machine)" readonly />`,
-        view: `<p class="view-lbl">Expand</p><p class="f-hint">Clips, aligned cloud, and HiRes land under outputs/&lt;scene&gt;/hyworld.</p>`
-      },
-      dataset: {
-        rail: `<label class="f-lab">Panorama density</label><input class="f-in" value="2" readonly />
-          <label class="f-lab">Upper polar density</label><input class="f-in" value="4" readonly />
-          <button class="f-btn pri" type="button">Build dataset</button>
-          <button class="f-btn ghost" type="button">Stop</button>`,
-        view: `<p class="view-lbl">Dataset</p><p class="f-hint">Images, depth, and normals for the splat trainer.</p>`
-      },
-      splat: {
-        rail: `<button class="f-btn pri" type="button">Train</button>
-          <button class="f-btn" type="button">Continue training</button>
-          <button class="f-btn" type="button">Pause</button>
-          <button class="f-btn ghost" type="button">Stop</button>
-          <p class="f-hint">Difix3D+ refine (evaluation only)</p>
-          <label class="f-lab">Export</label><input class="f-in" value="Unreal / VotionSplat Export" readonly />
-          <button class="f-btn pri" type="button">Export splat.ply</button>
-          <button class="f-btn" type="button">Open result folder</button>`,
-        view: `<p class="view-lbl">Splat</p><p class="f-hint">Unreal / VotionSplat Export: drag splat.ply into the Content Browser with VotionSplat-UnrealPlugin. No settings.</p>`
-      }
-    };
-    const stageBar = document.getElementById("stages");
-    stages.forEach(([id, label]) => {
-      const button = document.createElement("button");
-      button.type = "button";
-      button.textContent = label;
-      button.dataset.stage = id;
-      button.addEventListener("click", () => show(id));
-      stageBar.appendChild(button);
-    });
-    function show(id) {
-      document.querySelectorAll("#stages button").forEach((button) => {
-        button.classList.toggle("on", button.dataset.stage === id);
-      });
-      document.getElementById("rail").innerHTML = pages[id].rail;
-      document.getElementById("view").innerHTML = pages[id].view;
-    }
-    show("home");
-  </script>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
 </body>
 </html>
