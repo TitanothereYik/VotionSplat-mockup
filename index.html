@@ -79,6 +79,7 @@
           <tr><td>WorldStereo config</td><td>Expand</td><td>0.00</td><td>core</td></tr>
           <tr><td>480P config</td><td>Expand</td><td>0.00</td><td>core</td></tr>
           <tr><td>720P configs</td><td>Expand</td><td>0.02</td><td>core</td></tr>
+          <tr><td>VAE config</td><td>Expand</td><td>0.00</td><td>core</td></tr>
           <tr><td>UMT5</td><td>Expand</td><td>6.74</td><td>core</td></tr>
           <tr><td>CLIP vision</td><td>Expand</td><td>1.26</td><td>core</td></tr>
           <tr><td>DINOv2</td><td>Expand</td><td>0.35</td><td>core</td></tr>
@@ -126,7 +127,10 @@
       panorama: {
         rail: `<button class="f-btn" type="button">2D Images</button>
           <button class="f-btn" type="button">360 Images</button>
-          <label class="f-lab">Sentence</label><input class="f-in" value="a quiet alpine meadow" readonly />
+          <button class="f-btn" type="button">text</button>
+          <label class="f-lab">Surroundings</label>
+          <p class="f-hint">Type a sentence · Florence-2 caption, then edit</p>
+          <input class="f-in" value="a quiet alpine meadow" readonly />
           <div class="f-row"><button class="f-btn" type="button">Detect</button><button class="f-btn" type="button">Caption</button></div>
           <div class="f-row"><button class="f-btn pri" type="button">Generate</button><button class="f-btn ghost" type="button">Stop</button></div>
           <button class="f-btn" type="button">Use as pano.png</button>
@@ -153,7 +157,8 @@
           <button class="f-btn" type="button">HiRes selected</button>
           <button class="f-btn ghost" type="button">Stop</button>
           <label class="f-lab">GPU memory</label><input class="f-in" value="Auto (fit this machine)" readonly />
-          <label class="f-lab">HiRes scale</label><input class="f-in" value="2x (1664x960)" readonly />`,
+          <label class="f-lab">HiRes scale</label><input class="f-in" value="2x (1664x960)" readonly />
+          <label class="f-lab">HiRes memory</label><input class="f-in" value="Auto (fit this machine)" readonly />`,
         view: `<p class="view-lbl">Expand</p><p class="f-hint">Clips, aligned cloud, and HiRes land under outputs/&lt;scene&gt;/hyworld.</p>`
       },
       dataset: {
@@ -166,7 +171,7 @@
       splat: {
         rail: `<button class="f-btn pri" type="button">Train</button>
           <button class="f-btn" type="button">Continue training</button>
-          <button class="f-btn" type="button">Pause/Resume</button>
+          <button class="f-btn" type="button">Pause</button>
           <button class="f-btn ghost" type="button">Stop</button>
           <p class="f-hint">Difix3D+ refine (evaluation only)</p>
           <label class="f-lab">Export</label><input class="f-in" value="Unreal / VotionSplat Export" readonly />
